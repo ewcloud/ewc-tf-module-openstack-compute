@@ -18,17 +18,6 @@ resource "openstack_compute_instance_v2" "instance" {
     }
   }
 
-  dynamic "network" {
-    for_each = [for n in var.networks: {
-      name   = n
-    }]
-    content {
-      name           = network.value.name
-    }
-  }
-
-
-
   metadata = var.instance_metadata
 
   dynamic "network" {
