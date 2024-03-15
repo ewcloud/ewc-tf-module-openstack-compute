@@ -6,6 +6,29 @@ resource "openstack_compute_instance_v2" "instance" {
   security_groups = var.security_groups
   user_data       = var.cloudinit_userdata
 
+  dynamic "block_device" {
+    for_each = var.os_volume.enable ? [1] : []
+    content {
+      uuid                  = var.image_id
+      source_type           = "image"
+      volume_size           = var.os_volume.size
+      boot_index            = 0
+      destination_type      = "volume"
+      delete_on_termination = true
+    }
+  }
+
+  dynamic "network" {
+    for_each = [for n in var.networks: {
+      name   = n
+    }]
+    content {
+      name           = network.value.name
+    }
+  }
+
+
+
   metadata = var.instance_metadata
 
   dynamic "network" {
