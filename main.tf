@@ -1,6 +1,6 @@
 resource "openstack_compute_instance_v2" "instance" {
   name            = "${var.app_name}-${var.instance_name}-${var.instance_index}"
-  image_id        = var.image_id 
+  image_id        = var.os_volume.enable ? null : var.image_id
   flavor_id       = var.flavor_id
   key_pair        = var.keypair_name
   security_groups = var.security_groups
