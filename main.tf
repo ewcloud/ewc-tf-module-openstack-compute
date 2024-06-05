@@ -29,6 +29,11 @@ resource "openstack_compute_instance_v2" "instance" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [
+      block_device["uuid"],
+    ]
+  }
 }
 
 resource "openstack_networking_floatingip_v2" "fip" {
