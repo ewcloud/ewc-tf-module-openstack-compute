@@ -1,10 +1,22 @@
 resource "openstack_compute_instance_v2" "instance" {
   name            = "${var.app_name}-${var.instance_name}-${var.instance_index}"
-  image_id        = var.image_id 
+  image_id        = var.os_volume.enable ? null : var.image_id
   flavor_id       = var.flavor_id
   key_pair        = var.keypair_name
   security_groups = var.security_groups
   user_data       = var.cloudinit_userdata
+
+  dynamic "block_device" {
+    for_each = var.os_volume.enable ? [1] : []
+    content {
+      uuid                  = var.image_id
+      source_type           = "image"
+      volume_size           = var.os_volume.size
+      boot_index            = 0
+      destination_type      = "volume"
+      delete_on_termination = true
+    }
+  }
 
   metadata = var.instance_metadata
 
@@ -17,6 +29,11 @@ resource "openstack_compute_instance_v2" "instance" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [
+      block_device["uuid"],
+    ]
+  }
 }
 
 resource "openstack_networking_floatingip_v2" "fip" {

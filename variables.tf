@@ -26,6 +26,14 @@ variable security_groups {
   default  = ["default"]
   nullable = false
 }
+variable os_volume {
+  type = object({enable = bool, size = number})
+  default = {
+    enable = false
+    size = 50
+  }
+}
+
 variable extra_volume {
   type = object({enable = bool, size = number}) 
   default = {
