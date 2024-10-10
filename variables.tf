@@ -33,13 +33,21 @@ variable os_volume {
     size = 50
   }
 }
-
 variable extra_volume {
-  type = object({enable = bool, size = number}) 
-  default = {
-    enable = false
-    size = 1
-  }
+  type = bool
+  default = false
+}
+variable extra_volume_size {
+  type = number
+  default = 1
+}
+variable extra_volume2 {
+  type = bool
+  default = false
+}
+variable extra_volume2_size {
+  type = number
+  default = 1
 }
 variable instance_metadata {
   type = map
