@@ -1,3 +1,3 @@
 data "openstack_networking_network_v2" "external" {
-  name = "external"
+  name = var.external_network_name
 }
