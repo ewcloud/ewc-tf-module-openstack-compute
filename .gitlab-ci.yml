@@ -27,7 +27,7 @@ terraform:validate:
     - echo "Validating Terraform code..."
     - terraform validate
   tags:
-    - docker
+    - ewc-k8s
   
 # Linting with TFLint
 terraform:lint:
@@ -38,7 +38,7 @@ terraform:lint:
     - tflint --init
     - tflint --format=compact
   tags:
-    - docker
+    - ewc-k8s
 
 # Security scanning with tfsec
 terraform:security:
@@ -54,7 +54,7 @@ terraform:security:
       - tfsec_report.xml
     expire_in: 1 week
   tags:
-    - docker
+    - ewc-k8s
 
 # Documentation validation
 terraform:docs:
@@ -69,7 +69,7 @@ terraform:docs:
     - echo "Checking for required documentation files..."
     - test -f README.md || (echo "README.md file missing" && exit 1)
   tags:
-    - docker
+    - ewc-k8s
 
 # Test with example code (optional; requires setting up mock provider)
 terraform:example-test:
@@ -80,6 +80,6 @@ terraform:example-test:
     - terraform init -backend=false
     - terraform validate
   tags:
-    - docker
+    - ewc-k8s
   allow_failure: true  # Make this optional in case examples directory doesn't exist yet
   when: manual       # Run only when manually triggered
