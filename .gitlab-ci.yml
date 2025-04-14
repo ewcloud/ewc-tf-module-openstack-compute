@@ -46,7 +46,7 @@ terraform:security:
   image: aquasec/tfsec:v${TFSEC_VERSION}
   script:
     - echo "Running tfsec security scanner..."
-    - tfsec . --format=junit > tfsec_report.xml
+    - tfsec . --format=json | tee tfsec_report.xml
   artifacts:
     reports:
       junit: tfsec_report.xml
