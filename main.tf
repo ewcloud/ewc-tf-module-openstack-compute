@@ -62,10 +62,11 @@ resource "openstack_blockstorage_volume_v3" "instance_volume" {
   size                 = var.extra_volume_size
   enable_online_resize = true
   # Modified tags implementation to use the correct format
-  tags = compact(distinct(concat(
-    [var.app_name],
-    [for k, v in var.tags : k]
-  )))
+  metadata = merge(
+    var.instance_metadata != null ? var.instance_metadata : {},
+    var.tags,
+    { "app_name" = var.app_name }
+  )
 }
 
 resource "openstack_compute_volume_attach_v2" "volume_attachment" {
@@ -82,10 +83,11 @@ resource "openstack_blockstorage_volume_v3" "instance_volume2" {
   size                 = var.extra_volume2_size
   enable_online_resize = true
   # Modified tags implementation to use the correct format
-  tags = compact(distinct(concat(
-    [var.app_name],
-    [for k, v in var.tags : k]
-  )))
+  metadata = merge(
+    var.instance_metadata != null ? var.instance_metadata : {},
+    var.tags,
+    { "app_name" = var.app_name }
+  )
 }
 
 resource "openstack_compute_volume_attach_v2" "volume_attachment2" {
