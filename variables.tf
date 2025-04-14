@@ -65,6 +65,7 @@ variable "networks" {
   nullable    = false
 }
 
+#tflint-ignore: terraform_unused_declarations
 variable "add_sfs_network" {
   description = "Shared File System network to add (if needed)"
   type        = string

@@ -38,7 +38,7 @@ output "instance" {
 
 output "volumes" {
   value = {
-    primary   = var.os_volume.enable ? openstack_compute_instance_v2.instance.block_device.0.uuid : null
+    primary   = var.os_volume.enable ? openstack_compute_instance_v2.instance.block_device[0].uuid : null
     volume_1  = var.extra_volume ? {
       id   = openstack_blockstorage_volume_v3.instance_volume[0].id
       name = openstack_blockstorage_volume_v3.instance_volume[0].name
