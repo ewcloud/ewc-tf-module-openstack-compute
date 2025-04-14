@@ -25,8 +25,8 @@ resource "openstack_compute_instance_v2" "instance" {
   )
 
   dynamic "network" {
-    for_each = [for n in var.networks: {
-      name   = n
+    for_each = [for n in var.networks : {
+      name = n
     }]
     content {
       name = network.value.name
@@ -56,12 +56,12 @@ resource "openstack_compute_floatingip_associate_v2" "fip" {
 
 # First additional volume resources
 resource "openstack_blockstorage_volume_v3" "instance_volume" {
-  count               = var.extra_volume ? 1 : 0
-  name                = "${var.app_name}_${var.instance_name}_${var.instance_index}_volume"
-  description         = "Volume for ${var.app_name}_${var.instance_name}_${var.instance_index}"
-  size                = var.extra_volume_size
+  count                = var.extra_volume ? 1 : 0
+  name                 = "${var.app_name}_${var.instance_name}_${var.instance_index}_volume"
+  description          = "Volume for ${var.app_name}_${var.instance_name}_${var.instance_index}"
+  size                 = var.extra_volume_size
   enable_online_resize = true
-  tags                = concat(keys(var.tags), [var.app_name])
+  tags                 = concat(keys(var.tags), [var.app_name])
 }
 
 resource "openstack_compute_volume_attach_v2" "volume_attachment" {
@@ -72,12 +72,12 @@ resource "openstack_compute_volume_attach_v2" "volume_attachment" {
 
 # Second additional volume resources
 resource "openstack_blockstorage_volume_v3" "instance_volume2" {
-  count               = var.extra_volume2 ? 1 : 0
-  name                = "${var.app_name}_${var.instance_name}_${var.instance_index}_volume2"
-  description         = "Volume for ${var.app_name}_${var.instance_name}_${var.instance_index}"
-  size                = var.extra_volume2_size
+  count                = var.extra_volume2 ? 1 : 0
+  name                 = "${var.app_name}_${var.instance_name}_${var.instance_index}_volume2"
+  description          = "Volume for ${var.app_name}_${var.instance_name}_${var.instance_index}"
+  size                 = var.extra_volume2_size
   enable_online_resize = true
-  tags                = concat(keys(var.tags), [var.app_name])
+  tags                 = concat(keys(var.tags), [var.app_name])
 }
 
 resource "openstack_compute_volume_attach_v2" "volume_attachment2" {
