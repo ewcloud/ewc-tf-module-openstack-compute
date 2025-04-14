@@ -1,0 +1,85 @@
+---
+# GitLab CI configuration for validating Terraform module
+# Created: April 14, 2025
+
+stages:
+  - validate
+  - test
+  - security
+
+variables:
+  TERRAFORM_VERSION: "1.5.7"
+  TFLINT_VERSION: "0.47.0"
+  TFSEC_VERSION: "1.28.1"
+  
+# Use HashiCorp's official Terraform image
+image: "hashicorp/terraform:${TERRAFORM_VERSION}"
+
+# Basic validation job using Terraform's built-in fmt and validate commands
+terraform:validate:
+  stage: validate
+  script:
+    - echo "Checking Terraform formatting..."
+    - terraform fmt -check -recursive
+    - echo "Initializing Terraform..."
+    # Use -backend=false because this is a module, not a complete configuration
+    - terraform init -backend=false
+    - echo "Validating Terraform code..."
+    - terraform validate
+  tags:
+    - docker
+  
+# Linting with TFLint
+terraform:lint:
+  stage: validate
+  image: ghcr.io/terraform-linters/tflint:v${TFLINT_VERSION}
+  script:
+    - echo "Running TFLint..."
+    - tflint --init
+    - tflint --format=compact
+  tags:
+    - docker
+
+# Security scanning with tfsec
+terraform:security:
+  stage: security
+  image: aquasec/tfsec:v${TFSEC_VERSION}
+  script:
+    - echo "Running tfsec security scanner..."
+    - tfsec . --format=junit > tfsec_report.xml
+  artifacts:
+    reports:
+      junit: tfsec_report.xml
+    paths:
+      - tfsec_report.xml
+    expire_in: 1 week
+  tags:
+    - docker
+
+# Documentation validation
+terraform:docs:
+  stage: validate
+  image: node:16-alpine
+  before_script:
+    - apk add --no-cache git
+    - npm install -g markdown-link-check
+  script:
+    - echo "Checking for broken links in documentation..."
+    - find . -name "*.md" -exec markdown-link-check {} \;
+    - echo "Checking for required documentation files..."
+    - test -f README.md || (echo "README.md file missing" && exit 1)
+  tags:
+    - docker
+
+# Test with example code (optional; requires setting up mock provider)
+terraform:example-test:
+  stage: test
+  script:
+    - echo "Testing with example configuration..."
+    - cd examples/basic # Adjust this path if your examples are organized differently
+    - terraform init -backend=false
+    - terraform validate
+  tags:
+    - docker
+  allow_failure: true  # Make this optional in case examples directory doesn't exist yet
+  when: manual       # Run only when manually triggered
