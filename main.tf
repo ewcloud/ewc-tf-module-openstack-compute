@@ -61,7 +61,11 @@ resource "openstack_blockstorage_volume_v3" "instance_volume" {
   description          = "Volume for ${var.app_name}_${var.instance_name}_${var.instance_index}"
   size                 = var.extra_volume_size
   enable_online_resize = true
-  tags                 = concat(keys(var.tags), [var.app_name])
+  # Modified tags implementation to use the correct format
+  tags = compact(distinct(concat(
+    [var.app_name],
+    [for k, v in var.tags : k]
+  )))
 }
 
 resource "openstack_compute_volume_attach_v2" "volume_attachment" {
@@ -77,7 +81,11 @@ resource "openstack_blockstorage_volume_v3" "instance_volume2" {
   description          = "Volume for ${var.app_name}_${var.instance_name}_${var.instance_index}"
   size                 = var.extra_volume2_size
   enable_online_resize = true
-  tags                 = concat(keys(var.tags), [var.app_name])
+  # Modified tags implementation to use the correct format
+  tags = compact(distinct(concat(
+    [var.app_name],
+    [for k, v in var.tags : k]
+  )))
 }
 
 resource "openstack_compute_volume_attach_v2" "volume_attachment2" {

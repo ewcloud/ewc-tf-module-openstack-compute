@@ -20,8 +20,7 @@ terraform:validate:
   stage: validate
   script:
     - echo "Checking Terraform formatting..."
-    - terraform fmt -recursive
-    - terraform fmt -check -recursive
+    - terraform fmt -diff -check -recursive
     - echo "Initializing Terraform..."
     # Use -backend=false because this is a module, not a complete configuration
     - terraform init -backend=false
