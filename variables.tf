@@ -28,24 +28,32 @@ variable "instance_index" {
   }
 }
 
-variable "image_id" {
-  description = "ID of the image to use for the instance"
+variable "image_name" {
+  description = "Name of the image to use for the instance (Optional; Required if image_id is empty)"
   type        = string
+  default     = null
+  nullable    = true
+}
 
-  validation {
-    condition     = length(var.image_id) > 0
-    error_message = "Image ID cannot be empty."
-  }
+variable "flavor_name" {
+  description = "Name of the flavor to use for the instance (Optional; Required if flavor_id is empty)"
+  type        = string
+  default     = null
+  nullable    = true
+}
+
+variable "image_id" {
+  description = "ID of the image to use for the instance (Optional; Required if image_name is empty or if configuring an OS volume)"
+  type        = string
+  default     = null
+  nullable    = true
 }
 
 variable "flavor_id" {
-  description = "ID of the flavor to use for the instance"
+  description = "ID of the flavor to use for the instance (Optional; Required if flavor_name is empty)"
   type        = string
-
-  validation {
-    condition     = length(var.flavor_id) > 0
-    error_message = "Flavor ID cannot be empty."
-  }
+  default     = null
+  nullable    = true
 }
 
 variable "keypair_name" {
