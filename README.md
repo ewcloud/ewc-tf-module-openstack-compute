@@ -2,6 +2,11 @@
 
 This Terraform module creates and configures OpenStack compute instances with optional attached storage volumes and networking configurations.
 
+## Copyright and License
+>💡 No dependencies are distributed as part of this repository.
+
+See the [LICENSE](./LICENSE) file for licensing information as it pertains to files in this repository.
+
 ## Features
 
 - Create OpenStack compute instances with customizable configurations
@@ -157,6 +162,4 @@ This tagging approach makes it easier to filter, identify, and manage resources 
 4. Implement proper key management for your keypair_name
 5. Use cloud-init userdata for consistent instance initialization
 
-## License
 
-See LICENSE file for details.
