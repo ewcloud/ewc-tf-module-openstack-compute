@@ -72,8 +72,10 @@ module "web_server" {
 | app_name | Application name, used as prefix in the full instance name | `string` | n/a | yes |
 | instance_name | Name of the instance, used in the full instance name | `string` | n/a | yes |
 | instance_index | Index or identifier for the instance, used as suffix in the full instance name | `number` | n/a | yes |
-| image_id | ID of the image to use for the instance | `string` | n/a | yes |
-| flavor_id | ID of the flavor to use for the instance | `string` | n/a | yes |
+| image_id | (Optional; Required if image_name is empty and not booting from a volume. Do not specify if booting from a volume.) The image ID to use for the instance  | `string` | n/a | no |
+| flavor_id | (Optional; Required if flavor_name is empty) The flavor ID to use for the instance | `string` | n/a | no |
+| image_name | (Optional; Required if image_id is empty and not booting from a volume. Do not specify if booting from a volume.) The name of the image to use for the instance  | `string` | n/a | no |
+| flavor_name | (Optional; Required if flavor_id is empty) The name the flavor to use for the instance | `string` | n/a | no |
 | keypair_name | Name of the keypair to use for SSH access to the instance | `string` | n/a | yes |
 | networks | List of network names to attach the instance to | `list(string)` | n/a | yes |
 | security_groups | List of security group names to apply to the instance | `list(string)` | `["default"]` | no |
