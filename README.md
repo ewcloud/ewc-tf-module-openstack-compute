@@ -182,3 +182,21 @@ The above will result in:
 - Volumes and floating IPs tagged with: `app_name`, `environment`, and `project` tags
 
 This tagging approach makes it easier to filter, identify, and manage resources in your OpenStack environment.
+
+## Changelog
+All notable changes (i.e. fixes, features and breaking changes) are documented 
+in the [CHANGELOG.md](./CHANGELOG.md).
+
+## Contributing
+
+Thanks for taking the time to join our community and start contributing!
+Please make sure to:
+* Familiarize yourself with our [Code of Conduct](./CODE_OF_CONDUCT.md) before 
+contributing.
+* See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to request 
+or submit changes.
+
+## Authors
+
+[European Weather Cloud](http://support.europeanweather.cloud/) 
+<[support@europeanweather.cloud](mailto:support@europeanweather.cloud)>
