@@ -3,6 +3,6 @@ data "openstack_networking_network_v2" "external" {
 }
 
 data "openstack_images_image_v2" "image" {
-  name        = "${var.image_name}"
+  name        = var.image_name
   most_recent = true
 }
