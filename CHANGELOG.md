@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/ewcloud/ewc-tf-module-openstack-compute/compare/1.4.0...1.5.0) (2026-07-24)
+
+
+### Features
+
+* Autoresolve Image ID from Name for simple OS Volume config ([#3](https://github.com/ewcloud/ewc-tf-module-openstack-compute/issues/3)) ([fe226de](https://github.com/ewcloud/ewc-tf-module-openstack-compute/commit/fe226de1303300514d50f5f9c5ba540fca684a20))
+
 # [1.4.0](https://github.com/ewcloud/ewc-tf-module-openstack-compute/compare/1.3.1...1.4.0) (2025-09-05)
 
 
