@@ -152,11 +152,19 @@ The following components will be included in the working environment:
 
 ## Best Practices
 
-1. Always specify appropriate security groups for your instances
-2. Use unique and descriptive names for instances to aid in identification
-3. Consider using OS volumes for production instances for improved performance and resilience
-4. Implement proper key management for your keypair_name
-5. Use cloud-init userdata for consistent instance initialization
+1. Prefer image ID rather than the image Name as input, to guarantee reproducibility/idempotence.
+  Consider these edge-cases:
+    * There are multiple images with the same Name available
+
+    * The image Name is passed onto a new image every few months
+
+    There is risk of downtime/data loss if re-applying WHEN ANY OF THE ABOVE becomes true since an initial instance provisioning; whenever the image Name input is set, this module will pick the newest image ID that corresponds to said Name.
+
+2. Always specify appropriate security groups for your instances
+3. Use unique and descriptive names for instances to aid in identification
+5. Consider using OS volumes for production instances for improved performance and resilience
+6. Implement proper key management for your keypair_name
+7. Use cloud-init userdata for consistent instance initialization
 
 ### Resource Tagging
 
