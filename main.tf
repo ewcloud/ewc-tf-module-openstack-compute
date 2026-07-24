@@ -1,8 +1,7 @@
 resource "openstack_compute_instance_v2" "instance" {
   name            = "${var.app_name}-${var.instance_name}-${var.instance_index}"
-  image_id        = var.os_volume.enable ? null : var.image_id
+  image_id        = var.image_id != null ? var.image_id : data.openstack_images_image_v2.image.id
   flavor_id       = var.flavor_id
-  image_name      = var.image_id != null ? null : var.image_name
   flavor_name     = var.flavor_name
   key_pair        = var.keypair_name
   security_groups = var.security_groups
@@ -11,7 +10,7 @@ resource "openstack_compute_instance_v2" "instance" {
   dynamic "block_device" {
     for_each = var.os_volume.enable ? [1] : []
     content {
-      uuid                  = var.image_id
+      uuid                  = var.image_id != null ? var.image_id : data.openstack_images_image_v2.image.id
       source_type           = "image"
       volume_size           = var.os_volume.size
       boot_index            = 0
@@ -40,22 +39,16 @@ resource "openstack_compute_instance_v2" "instance" {
       block_device["uuid"],
     ]
 
-    # Input validation to ensure image_id (e.g. the image UUID) is availble when configuring block_device
-    precondition {
-      condition     = !(var.os_volume.enable && var.image_id == null)
-      error_message = "When configuring an OS volume, image id must be set"
-    }
-
     # Input validation to ensure either flavor_id or flavor_name is available
     precondition {
       condition     = (var.flavor_id == null && var.flavor_name != null) || (var.flavor_id != null && var.flavor_name == null)
       error_message = "Either the flavor id or the flavor name must be set"
     }
 
-    # Input validation to ensure either image_id or image_name is available, constrained by os_volume being available as well
+    # Input validation to ensure either image_id or image_name is available
     precondition {
-      condition     = var.os_volume.enable || (!var.os_volume.enable && (var.image_id == null && var.image_name != null) || (var.image_id != null && var.image_name == null))
-      error_message = "Either the image id or the image name must be set if no OS volume is configured"
+      condition     = (var.image_id == null && var.image_name != null) || (var.image_id != null && var.image_name == null)
+      error_message = "Either the image id or the image name must be set"
     }
   }
 }
