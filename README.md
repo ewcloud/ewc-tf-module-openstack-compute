@@ -4,19 +4,6 @@ This [Terraform module](https://developer.hashicorp.com/terraform/language/modul
 configures [OpenStack compute](https://docs.openstack.org/nova/latest/)
 instances with optional attached storage volumes and networking configurations.
 
-## Copyright and License
-Copyright © EUMETSAT 2025.
-
-The provided code and instructions are licensed under the [MIT license](./LICENSE).
-They are intended to automate the setup of an environment that includes 
-third-party software components.
-The usage and distribution terms of the resulting environment are 
-subject to the individual licenses of those third-party libraries.
-
-Users are responsible for reviewing and complying with the licenses of
-all third-party components included in the environment.
-
-Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
 
 ## Features
 
@@ -34,7 +21,7 @@ Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distrib
 Before proceeding, if you lack OpenStack Application Credentials or do not know
 how to make them available to Ansible in your development environment, make sure
 to check out the 
-[EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials).
+[EWC documentation](https://confluence.ecmwf.int/x/TiRNH).
 
 ## Usage
 
@@ -102,13 +89,6 @@ module "web_server" {
 | external_network_name | Name of the external network for floating IPs | `string` | `"external"` | no |
 | tags | A map of tags to assign to all resources that support it | `map(string)` | `{}` | no |
 
-## SW Bill of Materials (SBoM)
-Third-party components used in the working environment.
-
-The following components will be included in the working environment:
-| Component | Version | License | Home URL |
-|------|---------|---------|--------------|
-| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
 ## Outputs
 
@@ -150,13 +130,28 @@ The following components will be included in the working environment:
 }
 ```
 
+## SW Bill of Materials (SBoM)
+
+The following components will be included in the working environment:
+| Component | Version | License | Home URL |
+|------|---------|---------|--------------|
+| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
+
 ## Best Practices
 
-1. Always specify appropriate security groups for your instances
-2. Use unique and descriptive names for instances to aid in identification
-3. Consider using OS volumes for production instances for improved performance and resilience
-4. Implement proper key management for your keypair_name
-5. Use cloud-init userdata for consistent instance initialization
+1. Prefer image ID rather than the image Name as input, to guarantee reproducibility/idempotence.
+  Consider these edge-cases:
+    * There are multiple images with the same Name available
+
+    * The image Name is passed onto a new image every few months
+
+    There is risk of downtime/data loss if re-applying WHEN ANY OF THE ABOVE becomes true since an initial instance provisioning; whenever the image Name input is set, this module will pick the newest image ID that corresponds to said Name.
+
+2. Always specify appropriate security groups for your instances
+3. Use unique and descriptive names for instances to aid in identification
+5. Consider using OS volumes for production instances for improved performance and resilience
+6. Implement proper key management for your keypair_name
+7. Use cloud-init userdata for consistent instance initialization
 
 ### Resource Tagging
 
@@ -195,6 +190,20 @@ Please make sure to:
 contributing.
 * See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to request 
 or submit changes.
+
+## Copyright and License
+Copyright © EUMETSAT 2026.
+
+The provided code and instructions are licensed under the [MIT license](./LICENSE).
+They are intended to automate the setup of an environment that includes 
+third-party software components.
+The usage and distribution terms of the resulting environment are 
+subject to the individual licenses of those third-party libraries.
+
+Users are responsible for reviewing and complying with the licenses of
+all third-party components included in the environment.
+
+Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
 
 ## Authors
 
