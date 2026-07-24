@@ -21,7 +21,7 @@ instances with optional attached storage volumes and networking configurations.
 Before proceeding, if you lack OpenStack Application Credentials or do not know
 how to make them available to Ansible in your development environment, make sure
 to check out the 
-[EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials).
+[EWC documentation](https://confluence.ecmwf.int/x/TiRNH).
 
 ## Usage
 
@@ -89,13 +89,6 @@ module "web_server" {
 | external_network_name | Name of the external network for floating IPs | `string` | `"external"` | no |
 | tags | A map of tags to assign to all resources that support it | `map(string)` | `{}` | no |
 
-## SW Bill of Materials (SBoM)
-Third-party components used in the working environment.
-
-The following components will be included in the working environment:
-| Component | Version | License | Home URL |
-|------|---------|---------|--------------|
-| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
 ## Outputs
 
@@ -136,6 +129,13 @@ The following components will be included in the working environment:
   }
 }
 ```
+
+## SW Bill of Materials (SBoM)
+
+The following components will be included in the working environment:
+| Component | Version | License | Home URL |
+|------|---------|---------|--------------|
+| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
 ## Best Practices
 
