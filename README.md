@@ -78,7 +78,7 @@ module "web_server" {
 | networks | List of network names to attach the instance to | `list(string)` | n/a | yes |
 | security_groups | List of security group names to apply to the instance | `list(string)` | `["default"]` | no |
 | instance_has_fip | Whether to assign a floating IP to the instance | `bool` | `false` | no |
-| os_volume | Configuration for the primary OS volume | `object({enable = bool, size = number})` | `{enable = false, size = 50}` | no |
+| os_volume | Configuration for the primary OS volume | `object({enable = bool, size = number})` | `{enable = true, size = 50}` | no |
 | extra_volume | Whether to attach an additional volume to the instance | `bool` | `false` | no |
 | extra_volume_size | Size in GB of the additional volume | `number` | `1` | no |
 | extra_volume2 | Whether to attach a second additional volume to the instance | `bool` | `false` | no |

@@ -97,7 +97,7 @@ variable "os_volume" {
   description = "Configuration for the primary OS volume"
   type        = object({ enable = bool, size = number })
   default = {
-    enable = false
+    enable = true
     size   = 50
   }
 }
