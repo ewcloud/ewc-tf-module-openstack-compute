@@ -8,7 +8,7 @@ instances with optional attached storage volumes and networking configurations.
 ## Features
 
 - Create OpenStack compute instances with customizable configurations
-- Optionally boot from volume with configurable size
+- Boot from volume with configurable size by default
 - Support for attaching additional volumes
 - Floating IP assignment for public access
 - Security group configuration
@@ -25,11 +25,12 @@ to check out the
 
 ## Usage
 
-### EUMETSAT compute Site
+>💡 Checkout the [EWC Knowledge Base](https://confluence.ecmwf.int/x/HRUoFw) for up-to-date information on available  **VM images** and **VM plans** (i.e. flavors)
+
+### EUMETSAT Compute Site
 
 ```hcl
-# demo.tf
-module "vm" {
+module "server" {
   source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
 
   app_name       = "<user-defined application name>"
@@ -62,8 +63,7 @@ module "vm" {
 ### ECMWF Compute Site
 
 ```hcl
-# demo.tf
-module "vm" {
+module "server" {
   source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
 
   app_name       = "<user-defined application name>"
@@ -73,7 +73,7 @@ module "vm" {
   flavor_id      = "8cpu-16gbmem-80gbdisk"
   keypair_name   = "<user-created keypair name>"
   
-  networks = ["private-<region>-ewcloud-<tenancy_name>"]
+  networks = ["private-<region>-ewcloud-<tenancy name>"]
 
   external_network_name = "external-internet"
 
@@ -160,13 +160,6 @@ module "vm" {
 }
 ```
 
-## SW Bill of Materials (SBoM)
-
-The following components will be included in the working environment:
-| Component | Version | License | Home URL |
-|------|---------|---------|--------------|
-| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
-
 ## Best Practices
 
 1. Prefer image ID rather than the image Name as input, to guarantee reproducibility/idempotence.
@@ -182,6 +175,14 @@ The following components will be included in the working environment:
 5. Consider using OS volumes for production instances for improved performance and resilience
 6. Implement proper key management for your keypair_name
 7. Use cloud-init userdata for consistent instance initialization
+
+## SW Bill of Materials (SBoM)
+
+The following components will be included in the working environment:
+| Component | Version | License | Home URL |
+|------|---------|---------|--------------|
+| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
+
 
 ### Resource Tagging
 
