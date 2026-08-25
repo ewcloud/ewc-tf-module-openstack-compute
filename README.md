@@ -176,12 +176,6 @@ module "server" {
 6. Implement proper key management for your keypair_name
 7. Use cloud-init userdata for consistent instance initialization
 
-## SW Bill of Materials (SBoM)
-
-The following components will be included in the working environment:
-| Component | Version | License | Home URL |
-|------|---------|---------|--------------|
-| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
 
 ### Resource Tagging
@@ -208,6 +202,13 @@ The above will result in:
 - Volumes and floating IPs tagged with: `app_name`, `environment`, and `project` tags
 
 This tagging approach makes it easier to filter, identify, and manage resources in your OpenStack environment.
+
+## SW Bill of Materials (SBoM)
+
+The following components will be included in the working environment:
+| Component | Version | License | Home URL |
+|------|---------|---------|--------------|
+| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
 ## Changelog
 All notable changes (i.e. fixes, features and breaking changes) are documented 
