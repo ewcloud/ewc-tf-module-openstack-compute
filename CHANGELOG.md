@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/ewcloud/ewc-tf-module-openstack-compute/compare/1.5.0...1.6.0) (2026-08-25)
+
+
+### Features
+
+* OS volume configured by default ([#4](https://github.com/ewcloud/ewc-tf-module-openstack-compute/issues/4)) ([9e4f8d3](https://github.com/ewcloud/ewc-tf-module-openstack-compute/commit/9e4f8d388708c24e55a3352603570855379b7238))
+
 # [1.5.0](https://github.com/ewcloud/ewc-tf-module-openstack-compute/compare/1.4.0...1.5.0) (2026-07-24)
 
 
