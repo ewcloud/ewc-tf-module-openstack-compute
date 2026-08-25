@@ -8,7 +8,7 @@ instances with optional attached storage volumes and networking configurations.
 ## Features
 
 - Create OpenStack compute instances with customizable configurations
-- Optionally boot from volume with configurable size
+- Boot from volume with configurable size by default
 - Support for attaching additional volumes
 - Floating IP assignment for public access
 - Security group configuration
@@ -25,40 +25,70 @@ to check out the
 
 ## Usage
 
-```hcl
-module "web_server" {
-  source = "path/to/openstack-compute"
+>💡 Checkout the [EWC Knowledge Base](https://confluence.ecmwf.int/x/HRUoFw) for up-to-date information on available  **VM images** and **VM plans** (i.e. flavors)
 
-  app_name       = "web"
-  instance_name  = "server"
+### EUMETSAT Compute Site
+
+```hcl
+module "server" {
+  source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
+
+  app_name       = "<user-defined application name>"
+  instance_name  = "<user-defined instance name>"
   instance_index = 1
-  image_id       = "your-image-id"
-  flavor_id      = "your-flavor-id"
-  keypair_name   = "your-keypair-name"
+  image_id       = "Rocky-9.7-20260519081947"
+  flavor_id      = "8cpu-16gbmem"
+  keypair_name   = "<user-created keypair name>"
   
   networks = ["internal"]
-  
+
+  external_network_name = "external"
+
   instance_has_fip = true
   
-  os_volume = {
-    enable = true
-    size   = 80
-  }
-  
-  extra_volume      = true
-  extra_volume_size = 100
-  
-  security_groups = ["default", "web"]
+  security_groups = ["ssh"]
   
   instance_metadata = {
-    environment = "production"
-    role        = "web"
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
   }
   
   tags = {
-    environment = "production"
-    project     = "website"
-    owner       = "team-alpha"
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
+  }
+}
+```
+
+### ECMWF Compute Site
+
+```hcl
+module "server" {
+  source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
+
+  app_name       = "<user-defined application name>"
+  instance_name  = "<user-defined instance name>"
+  instance_index = 1
+  image_id       = "Rocky-9.7-20260519081947"
+  flavor_id      = "8cpu-16gbmem-80gbdisk"
+  keypair_name   = "<user-created keypair name>"
+  
+  networks = ["private-<region>-ewcloud-<tenancy name>"]
+
+  external_network_name = "external-internet"
+
+  instance_has_fip = true
+  
+  security_groups = ["ssh"]
+  
+  instance_metadata = {
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
+  }
+  
+  tags = {
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
   }
 }
 ```
@@ -78,7 +108,7 @@ module "web_server" {
 | networks | List of network names to attach the instance to | `list(string)` | n/a | yes |
 | security_groups | List of security group names to apply to the instance | `list(string)` | `["default"]` | no |
 | instance_has_fip | Whether to assign a floating IP to the instance | `bool` | `false` | no |
-| os_volume | Configuration for the primary OS volume | `object({enable = bool, size = number})` | `{enable = false, size = 50}` | no |
+| os_volume | Configuration for the primary OS volume | `object({enable = bool, size = number})` | `{enable = true, size = 50}` | no |
 | extra_volume | Whether to attach an additional volume to the instance | `bool` | `false` | no |
 | extra_volume_size | Size in GB of the additional volume | `number` | `1` | no |
 | extra_volume2 | Whether to attach a second additional volume to the instance | `bool` | `false` | no |
@@ -130,13 +160,6 @@ module "web_server" {
 }
 ```
 
-## SW Bill of Materials (SBoM)
-
-The following components will be included in the working environment:
-| Component | Version | License | Home URL |
-|------|---------|---------|--------------|
-| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
-
 ## Best Practices
 
 1. Prefer image ID rather than the image Name as input, to guarantee reproducibility/idempotence.
@@ -152,6 +175,8 @@ The following components will be included in the working environment:
 5. Consider using OS volumes for production instances for improved performance and resilience
 6. Implement proper key management for your keypair_name
 7. Use cloud-init userdata for consistent instance initialization
+
+
 
 ### Resource Tagging
 
@@ -177,6 +202,13 @@ The above will result in:
 - Volumes and floating IPs tagged with: `app_name`, `environment`, and `project` tags
 
 This tagging approach makes it easier to filter, identify, and manage resources in your OpenStack environment.
+
+## SW Bill of Materials (SBoM)
+
+The following components will be included in the working environment:
+| Component | Version | License | Home URL |
+|------|---------|---------|--------------|
+| terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
 ## Changelog
 All notable changes (i.e. fixes, features and breaking changes) are documented 
