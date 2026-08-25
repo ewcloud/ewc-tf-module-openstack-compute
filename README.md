@@ -25,40 +25,70 @@ to check out the
 
 ## Usage
 
-```hcl
-module "web_server" {
-  source = "path/to/openstack-compute"
+### EUMETSAT compute Site
 
-  app_name       = "web"
-  instance_name  = "server"
+```hcl
+# demo.tf
+module "vm" {
+  source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
+
+  app_name       = "<user-defined application name>"
+  instance_name  = "<user-defined instance name>"
   instance_index = 1
-  image_id       = "your-image-id"
-  flavor_id      = "your-flavor-id"
-  keypair_name   = "your-keypair-name"
+  image_id       = "Rocky-9.7-20260519081947"
+  flavor_id      = "8cpu-16gbmem"
+  keypair_name   = "<user-created keypair name>"
   
   networks = ["internal"]
-  
+
+  external_network_name = "external"
+
   instance_has_fip = true
   
-  os_volume = {
-    enable = true
-    size   = 80
-  }
-  
-  extra_volume      = true
-  extra_volume_size = 100
-  
-  security_groups = ["default", "web"]
+  security_groups = ["ssh"]
   
   instance_metadata = {
-    environment = "production"
-    role        = "web"
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
   }
   
   tags = {
-    environment = "production"
-    project     = "website"
-    owner       = "team-alpha"
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
+  }
+}
+```
+
+### ECMWF Compute Site
+
+```hcl
+# demo.tf
+module "vm" {
+  source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
+
+  app_name       = "<user-defined application name>"
+  instance_name  = "<user-defined instance name>"
+  instance_index = 1
+  image_id       = "Rocky-9.7-20260519081947"
+  flavor_id      = "8cpu-16gbmem-80gbdisk"
+  keypair_name   = "<user-created keypair name>"
+  
+  networks = ["private-<region>-ewcloud-<tenancy_name>"]
+
+  external_network_name = "external-internet"
+
+  instance_has_fip = true
+  
+  security_groups = ["ssh"]
+  
+  instance_metadata = {
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
+  }
+  
+  tags = {
+    owner           = "<owner name>"
+    deployment-tool = "terraform"
   }
 }
 ```
