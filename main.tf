@@ -54,17 +54,15 @@ resource "openstack_compute_instance_v2" "instance" {
 }
 
 # Floating IP resources
+# OpenStack provider 3.0.0 removed openstack_compute_floatingip_associate_v2, which this module used.
+# The floating IP is now attached to the server's port (port_id + fixed_ip) through the networking API (Neutron).
+# IMPORTANT: Never set network.port on the server: changing it forces replacement.
 resource "openstack_networking_floatingip_v2" "fip" {
-  count = var.instance_has_fip ? 1 : 0
-  pool  = data.openstack_networking_network_v2.external.name
-  tags  = concat(keys(var.tags), [var.app_name])
-}
-
-resource "openstack_compute_floatingip_associate_v2" "fip" {
-  count       = var.instance_has_fip ? 1 : 0
-  floating_ip = openstack_networking_floatingip_v2.fip[0].address
-  instance_id = openstack_compute_instance_v2.instance.id
-  fixed_ip    = openstack_compute_instance_v2.instance.network[0].fixed_ip_v4
+  count    = var.instance_has_fip ? 1 : 0
+  pool     = data.openstack_networking_network_v2.external.name
+  port_id  = data.openstack_networking_port_v2.fip_port[0].id
+  fixed_ip = openstack_compute_instance_v2.instance.network[0].fixed_ip_v4
+  tags     = concat(keys(var.tags), [var.app_name])
 }
 
 # First additional volume resources
