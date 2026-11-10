@@ -38,6 +38,7 @@ output "instance" {
 
 output "volumes" {
   value = {
+    # NOTE: The OpenStack provider fills block_device.uuid with the image ID read from the volume's metadata; it does expose the volume ID.
     primary = var.os_volume.enable ? openstack_compute_instance_v2.instance.block_device[0].uuid : null
     volume_1 = var.extra_volume ? {
       id   = openstack_blockstorage_volume_v3.instance_volume[0].id
@@ -50,5 +51,5 @@ output "volumes" {
       size = openstack_blockstorage_volume_v3.instance_volume2[0].size
     } : null
   }
-  description = "Information about the attached volumes"
+  description = "Information about the attached volumes. `primary` is the ID of the image the OS volume was created from, not the ID of the OS volume."
 }

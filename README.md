@@ -125,7 +125,7 @@ module "server" {
 | Name | Description |
 |------|-------------|
 | instance-data | Comprehensive information about the created instance |
-| volumes | Information about the attached volumes |
+| volumes | Information about the attached volumes. `primary` is the ID of the image the OS volume was created from, not the ID of the OS volume (see [Volumes Output Structure](#volumes-output-structure)) |
 
 ## Instance Output Structure
 
@@ -146,7 +146,7 @@ module "server" {
 
 ```hcl
 {
-  primary  = "volume-id-primary"  # if os_volume.enable = true
+  primary  = "image-id"  # ID of image out of which the OS volume was created (NOT the volume ID); Evaluates to null if os_volume.enable = false
   volume_1 = {
     id   = "volume-id-1"
     name = "app_name_instance_name_01_volume"
@@ -159,6 +159,39 @@ module "server" {
   }
 }
 ```
+
+`primary` holds an image ID, not a volume ID. The OpenStack provider does not
+report the ID of the OS volume that it creates, so this module cannot output
+it. 
+
+### OS Volume ID
+
+To find the OS volume, for example before taking a snapshot of it, 
+you can list the volumes attached to the instance via the [OpenStack CLI](https://docs.openstack.org/python-ironicclient/pike/cli/osc_plugin_cli.html).
+
+First, execute:
+
+```bash
+openstack server show <instance-id> -c volumes_attached
+```
+
+This lists every attached volume, including `volume_1` and `volume_2`.
+The OS volume's ID will be distinct from `volume_1.id` or `volume_2.id`.
+
+To validate you've gotten the OS volume's ID, run:
+```bash
+openstack volume show <volume-id> -c bootable
+```
+If the correct ID was provided, the above command should return:
+
+```
++----------+-------+
+| Field    | Value |
++----------+-------+
+| bootable | True  |
++----------+-------+
+```
+
 
 ## Best Practices
 
