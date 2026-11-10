@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1](https://github.com/ewcloud/ewc-tf-module-openstack-compute/compare/1.6.0...1.6.1) (2026-11-10)
+
+
+### Bug Fixes
+
+* Highlight discrepancy between documented and actual output IDs ([#7](https://github.com/ewcloud/ewc-tf-module-openstack-compute/issues/7)) ([3b4d2cc](https://github.com/ewcloud/ewc-tf-module-openstack-compute/commit/3b4d2cc981725e1d430154e566458af3eafcf803))
+
 # [1.6.0](https://github.com/ewcloud/ewc-tf-module-openstack-compute/compare/1.5.0...1.6.0) (2026-08-25)
 
 
