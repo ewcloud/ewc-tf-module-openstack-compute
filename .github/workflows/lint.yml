@@ -1,0 +1,82 @@
+name: HCL Lint
+
+on:
+  push:
+    paths:
+      - "**/*.tf"
+  pull_request:
+    paths:
+      - "**/*.tf"
+
+permissions:
+  contents: read
+
+jobs:
+  tofu:
+    name: tofu (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Must equal required_version in versions.tf (see CONTRIBUTING.md).
+          - name: floor
+            version: "1.12.12"
+          - name: latest
+            version: latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up OpenTofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          tofu_version: ${{ matrix.version }}
+          tofu_wrapper: false
+
+      - name: Check formatting
+        run: tofu fmt -check -diff -recursive
+
+      - name: Initialize
+        run: tofu init -backend=false -input=false
+
+      - name: Validate
+        run: tofu validate
+
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up TFLint
+        uses: terraform-linters/setup-tflint@v6
+        with:
+          tflint_version: v0.66.0
+
+      - name: Initialize TFLint
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run TFLint
+        run: tflint --format=compact
+
+  links:
+    name: links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Check Markdown links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          fail: true
+          args: >-
+            --no-progress
+            --max-retries 3
+            --retry-wait-time 10
+            --exclude-path CHANGELOG.md
+            './**/*.md'
